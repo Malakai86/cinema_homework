@@ -5,7 +5,7 @@ require_relative('film')
 class Ticket
 
   attr_reader :id
-  attr_accessor :customer_id, :film_id
+  attr_accessor :customer_id, :film_id, :seat
 
   def initialize(options)
     @id = options['id'].to_i if options['id']
