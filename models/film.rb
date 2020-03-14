@@ -7,9 +7,9 @@ class Film
 
   def initialize(options)
     @id = options['id'].to_i if options['id']
-    @title = options['id']
+    @title = options['title']
     @genre = options['genre']
-    @screening = options['screning']
+    @screening = options['screening']
   end
 
   def save()
@@ -28,4 +28,37 @@ class Film
     film_data = SqlRunner.run(sql, values).first
     @id = film_data['id'].to_i
   end
+
+  def update()
+    sql = "UPDATE films SET (
+    title,
+    genre,
+    screening
+    ) = (
+      $1, $2, $3
+      )
+      WHERE id = $4"
+      values = [@title, @genre, @screening]
+      SqlRunner.run(sql, values)
+    end
+
+    def delete()
+      sql = "DELETE FROM films
+      WHERE id = $1"
+      values = ['id']
+      SqlRunner.run(sql, values)
+    end
+
+  def self.all()
+    sql = "SELECT * FROM films"
+    film_data = SqlRunner.run(sql)
+    return Film.map_items(film_data)
+  end
+
+
+  def self.map_items(film_data)
+    result = film_data.map {|film| Film.new(film)}
+    return result
+  end
+
 end

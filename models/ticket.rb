@@ -26,6 +26,37 @@ class Ticket
     RETURNING id"
     values = [@customer_id, @film_id]
     ticket_data = SqlRunner.run(sql, values).first
-    @id = film['id'].to_i
+    @id = ticket_data['id'].to_i
   end
+
+  def update()
+    sql = "UPDATE customers SET (
+    customer_id,
+    film_id
+    ) = (
+      $1, $2
+      )
+      WHERE id = $3"
+      values = [@customer_id, @film_id]
+      SqlRunner.run(sql, values)
+    end
+
+    def delete()
+      sql = "DELETE FROM tickets
+      WHERE id = $1"
+      values = ['id']
+      SqlRunner.run(sql, values)
+    end
+
+  def self.all()
+    sql = "SELECT * FROM tickets"
+    ticket_data = SqlRunner.run(sql)
+    return Ticket.map_items(ticket_data)
+  end
+
+  def self.map_items(ticket_data)
+    result = ticket_data.map {|ticket| Ticket.new(ticket)}
+    return result
+  end
+
 end
