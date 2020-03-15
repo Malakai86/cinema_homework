@@ -5,12 +5,13 @@ require_relative('film')
 class Ticket
 
   attr_reader :id
-  attr_accessor :customer_id, :film_id, :seat
+  attr_accessor :customer_id, :film_id, :price
 
   def initialize(options)
     @id = options['id'].to_i if options['id']
     @customer_id = options['customer_id'].to_i
     @film_id = options['film_id'].to_i
+    @price = options['price'].to_i
   end
 
   def save()
@@ -34,10 +35,10 @@ class Ticket
     customer_id,
     film_id
     ) = (
-      $1, $2
+      $1, $2, $3
       )
-      WHERE id = $3"
-      values = [@customer_id, @film_id]
+      WHERE id = $4"
+      values = [@customer_id, @film_id, @price, @id]
       SqlRunner.run(sql, values)
     end
 
