@@ -67,6 +67,27 @@ def tickets()
   return Film.map_items(film_data).count
 end
 
+# def buy()
+#   sql = "SELECT cash FROM customers WHERE id = $1"
+#   values = [@id]
+#   cash_data = SqlRunner.run(sql, values)
+#   return Customer.map_items(cash_data)
+# end
+
+def buying()
+  sql = "SELECT price FROM films WHERE id = $1"
+  values = [@id]
+  price_data = SqlRunner.run(sql, values)
+  return price_data.map{|price| Film.new(price)}
+end
+
+def buy()
+  price = self.films()
+  price_cost = films.map{|film| film.price}
+  cost = price_cost.sum
+  return @cash - cost
+end
+
 def delete()
   sql = "DELETE FROM customers
   WHERE id = $1"
