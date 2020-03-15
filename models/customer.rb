@@ -67,12 +67,6 @@ def tickets()
   return Film.map_items(film_data).count
 end
 
-# def buy()
-#   sql = "SELECT cash FROM customers WHERE id = $1"
-#   values = [@id]
-#   cash_data = SqlRunner.run(sql, values)
-#   return Customer.map_items(cash_data)
-# end
 
 def buying()
   sql = "SELECT price FROM films WHERE id = $1"
