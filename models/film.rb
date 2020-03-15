@@ -3,13 +3,13 @@ require_relative('../db/sql_runner')
 class Film
 
   attr_reader :id
-  attr_accessor :title, :genre, :screening
+  attr_accessor :title, :genre, :price
 
   def initialize(options)
     @id = options['id'].to_i if options['id']
     @title = options['title']
     @genre = options['genre']
-    @screening = options['screening']
+    @price = options['price'].to_i
   end
 
   def save()
@@ -17,14 +17,14 @@ class Film
     (
     title,
     genre,
-    screening
+    price
     )
     VALUES
     (
       $1, $2, $3
     )
     RETURNING id"
-    values = [@title, @genre, @screening]
+    values = [@title, @genre, @price]
     film_data = SqlRunner.run(sql, values).first
     @id = film_data['id'].to_i
   end
@@ -33,12 +33,12 @@ class Film
     sql = "UPDATE films SET (
     title,
     genre,
-    screening
+    price
     ) = (
       $1, $2, $3
       )
       WHERE id = $4"
-      values = [@title, @genre, @screening]
+      values = [@title, @genre, @price]
       SqlRunner.run(sql, values)
     end
 
@@ -50,6 +50,8 @@ class Film
       customer_data = SqlRunner.run(sql, values)
       return Customer.map_items(customer_data)
     end
+
+
 
     def delete()
       sql = "DELETE FROM films

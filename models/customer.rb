@@ -27,6 +27,14 @@ def save()
   @id = customer['id'].to_i
 end
 
+def films()
+  sql = "SELECT films.* FROM
+  films INNER JOIN
+  tickets ON
+  tickets.film_id = films.id WHERE customer_id = $1"
+  values = [@cash]
+end
+
 def update()
   sql = "UPDATE customers SET (
   name,
@@ -43,11 +51,20 @@ def films()
   sql = "SELECT films.* FROM
   films INNER JOIN
   tickets ON
-  tickets.film_id = films.id
-  WHERE customer_id = $1"
+  tickets.film_id = films.id WHERE customer_id = $1"
   values = [@id]
   film_data = SqlRunner.run(sql, values)
   return Film.map_items(film_data)
+end
+
+def tickets()
+  sql = "SELECT films.* FROM
+  films INNER JOIN
+  tickets ON
+  tickets.film_id = films.id WHERE customer_id = $1"
+  values = [@id]
+  film_data = SqlRunner.run(sql, values)
+  return Film.map_items(film_data).count
 end
 
 def delete()
